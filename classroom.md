@@ -31,21 +31,57 @@ waitForConnection();
 
 # Classroom communications test
 
-Over the next couple of pages we will be looking at the format of CAN data and how it can be represented in a more human readable format.
+Test of using LIA classroom pubsub API to emulate CAN bus messages.
 
-Status: 
-<div id="status"></div>
+
+
+## Setup
+
+Joining a classroom.
+
+1. Click on the share <i class="icon icon-social" /> icon in the top right corner of the page.
+2. Click on the "Classroom" button.
+3. Use the following settings.
+
+    - via Backend: <i class="icon icon-gundb icon-xs"></i> GUN 
+    - room: *Use the provided room name*
+    - maybe password: *Leave blank*
+    - relay server: https://peer.wallie.io/gun
+    - persistent storage: *Leave blank*
+    - Allow scripts to be executed in the chat: *Leave blank*
+4. Click on the "connect" button.
+## Test
+
+Status: <span id="status"></span>
+
+<script input="hidden">
+    window.status_refresh = setInterval(function()
+    {
+        document.getElementById("status").innerHTML = LIA.classroom.connected ? "Connected" : "Need to join classroom";
+        document.getElementById("status").style.color = LIA.classroom.connected ? "green" : "red";
+    }, 1000/16);
+</script>
 
 Message:
 <div id="message"></div>
 
-<script>
+<script input="hidden">
     window.message_refresh = setInterval(function()
     {
         document.getElementById("message").innerHTML = window.canMessage ? JSON.stringify(window.canMessage) : "No message received";
     }, 1000/16);
+</script>
 
-    console.log( "init" );
+
+<label>CAN Frame ID: </label><input class="lia-quiz__input" type="text" id="can_frame_id" placeholder="123">
+<label>CAN Data: </label><input class="lia-quiz__input" type="text" id="can_frame_data" placeholder="A1B2C3D4E5F6">
+
+<script default="Send" input="submit">
+    console.log("Sending message");
+    LIA.classroom.publish("can-recv", {
+        id: document.getElementById("can_frame_id").value,
+        data: document.getElementById("can_frame_data").value
+    });
 </script>
 
 
