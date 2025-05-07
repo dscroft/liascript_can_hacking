@@ -1,12 +1,12 @@
 <!--
 author:   David Croft
 email:    david.croft@warwick.ac.uk
-version:  0.1.0
+version:  0.2.0
 language: en
 narrator: UK English Female
 
 classroom: enable
-mode: Presentation
+mooode: Presentation
 icon: https://dscroft.github.io/liascript_materials/assets/logo.svg
 
 import: macros_interface.md
@@ -84,9 +84,9 @@ This sort of attack should not work in a modern vehicle but certainly was possib
 
 ------------------------------
 
-This activity works best in groups of 3, ideally every member will have their own computer.
+This activity works best in groups of 2, ideally every member will have their own computer.
 
-In the event that there are insufficient participants or computers then groups of 2 or 4 will also work, individuals on their own will struggle.
+In the event that there are insufficient participants or computers then groups of 1 can be used but you will need to open two browser windows.
 
 ------------------------------
 
@@ -95,6 +95,10 @@ You can navigate through the activity using:
 - The arrow buttons at the bottom of the page.
 - The arrow keys on your keyboard.
 - The navigation bar on the left.
+
+You can adjust size and presentation of the page using the presentation mode <i class="icon icon-book lia-btn__icon"></i> and settings <i class="icon icon-settings lia-btn__icon"></i> icons in the top right corner of the page.
+
+You can also adjust language options but this activity has only been tested in English.
 
 -----------------------------
 
@@ -208,25 +212,25 @@ In which case it appears as 0x0000960000000000
 
 # Activity 
 
-These instructions are written on the assumption that you are working as part of a group with 3 computers, each computer fills a specific role.
+These instructions are written on the assumption that you are working as part of a two person group, each person fills a specific role.
 
-These roles will be referred to as Alice, Bob and Charlie.
+These roles will be referred to as Alice and Charlie.
 
 - Alice 👩 will be playing the part of the driver.
 
   - In this scenario it is a drive by wire vehicle, so the accelerator pedal is not mechanically linked to anything.
   - Pressing the pedal causes a signal to be sent to the engine control unit (ECU) to perform the appropriate action. 
-- Bob 👨 will be playing the part of the vehicle.
 
-  - We are just going to simulate the Instrument Cluster (IC) for this exercise.
-    
-    - In a traditional vehicle this may be handled by a dedicated microcontroller.
-    - In more modern vehicle or in the future this may be handled by a container process running on a more general purpose HPC (High Performance Computer).
-
-  - But the same principles apply to the engine control unit (ECU) and other vehicle systems.
 - Charlie 😈 will be playing a malicious attacker.
 
-  - They have gained access to the CAN bus and can send and receive messages.
+  - They have gained access to the CAN bus to send and receive messages.
+
+```ascii
+
+       👩     😈     🚗
+        |      |      | 
+CAN bus *------*------*
+```
 
 --------------------------------
 
@@ -246,7 +250,7 @@ CAN bus attacks like this have been demonstrated repeatedly on the production ve
 {{1}}
 > ~~Step 1:~~
 >
-> **Decide in your groups who will be Alice, Bob and Charlie.**
+> **Decide in your groups who will be Alice 👩 and Charlie 😈.**
 
 
 <!--
@@ -256,12 +260,7 @@ style="background-color: firebrick; color: white"
 >
 > Make sure to pay attention to the step numbers as some tasks will require you to you to do things at the same time as other group members.
 
-```ascii
 
-💻👩   💻😈   💻👨
- |      |      | 
- *------*------*
-```
 
 ## Hardware setup
 
@@ -269,7 +268,38 @@ style="background-color: firebrick; color: white"
 
 This is the setup we are emulating. 
 
-![](assets/images/placeholder.jpg "Vehicle CAN bus")
+<section class="flex-container">
+
+<!-- class="flex-child" style="min-width: 500px;" -->
+```ascii
+             .-------------------. .-------------------.
++--------+   |      +--------+   | |      +--------+   |
+|        |   +-.    |        |   | |      |        |   +-.  
+|   CANL o <-+ |    |   CANL o <-.-.      |   CANL o <-+ |
+|        |     #    |        |            |        |     #
+|        |     #    |        |            |        |     # Resistor
+|        |     #    |        |            |        |     #
+|   CANH * <-+ |    |   CANH * <-.-.      |   CANH * <-+ |
+|USB     |   +-.    |USB     |   | |      |USB     |   +-.
++-#------+   |      +-#------+   | |      +-#------+   |
+  |          |        |          | |        |          |
+  👩         |        😈         | |       🚗          |
+             .-------------------. .-------------------.
+```
+
+<!-- class="flex-child" style="min-width: 200px;" -->
+![](assets/images/placeholder.jpg "CAN bus setup in the lab")
+
+</section>
+
+When we conduct this activity in the lab we setup an actual CAN bus using Arduino boards and send real CAN frames between them.
+
+- Each group member connected via USB to one of the Arduino circuit boards.
+- The Arduino board connected via CAN into a simple CAN bus.
+- The CAN bus terminated by appropriate resistors at each end.
+
+Because you are running this practical activity remotely we are using an emulated CAN bus instead, but
+the data we are sending is the same as it would be in a real CAN frame.
 
 {{0-1}}
 > ~~Step 2:~~
@@ -300,50 +330,9 @@ This is the setup we are emulating.
 >
 > **Go to the page that corresponds to your role.**
 >
-> - Alice 👩, Bob 👨 or Charlie 😈.
+> - Alice 👩 or Charlie 😈.
 > 
 >   - You can use the navigation bar on the left or the arrow buttons below.
-
-
--------------------------
-
-When we conduct this activity in the lab we setup an actual CAN bus using Arduino boards and send real CAN frames between them.
-
-- Each group member connected via USB to one of the Arduino circuit boards.
-- The Arduino board connected via CAN into a simple CAN bus.
-- The CAN bus terminated by appropriate resistors at each end.
-
-Because you are running this practical activity remotely we are using an emulated CAN bus instead, but
-the data we are sending is the same as it would be in a real CAN frame.
-
-<section class="flex-container">
-
-<!-- class="flex-child" style="min-width: 500px;" -->
-```ascii
-             .-------------------. .-------------------.
-+--------+   |      +--------+   | |      +--------+   |
-|        |   +-.    |        |   | |      |        |   +-.  
-|   CANL o <-+ |    |   CANL o <-.-.      |   CANL o <-+ |
-|        |     #    |        |            |        |     #
-|        |     #    |        |            |        |     # Resistor
-|        |     #    |        |            |        |     #
-|   CANH * <-+ |    |   CANH * <-.-.      |   CANH * <-+ |
-|USB     |   +-.    |USB     |   | |      |USB     |   +-.
-+-#------+   |      +-#------+   | |      +-#------+   |
-  |          |        |          | |        |          |
- 💻👩        |       💻😈        | |       🚗          |
-             .-------------------. .-------------------.
-```
-
-<!-- class="flex-child" style="min-width: 200px;" -->
-![](assets/images/placeholder.jpg "CAN bus setup in the lab")
-
-</section>
-
-
-
-
-
 
 
 
@@ -355,7 +344,7 @@ the data we are sending is the same as it would be in a real CAN frame.
 {{0-1}}
 > ~~Step 4:~~
 >
-> **Use the controls below to simulate driving the vehicle.**
+> **Use the controls at he bottom of the page to simulate driving the vehicle.**
 >
 > - When you interact with the controls, the corresponding CAN frames will be sent to the CAN bus.
 >
@@ -363,46 +352,62 @@ the data we are sending is the same as it would be in a real CAN frame.
 >   - These CAN frames are based on *real* frames. E.g. the accelerator pedal frame was taken from a 2010 Toyota Prius.
 >
 > <script input="submit" default="Press for hint">
-"Try using the indicators."
+"Try using the headlights."
 </script>
 
 {{1-2}}
-> ~~Step 5:~~
+> ~~Step 5~~ 
 >
-> **Confirm with Bob 👨 that the instrument cluster is responding to your controls.**
+> **Work with Charlie to identify the CAN frames that correspond to the indicators.**
+>
+> - Press various combinations of the indicator buttons.
+>
+>   - You may want to make notes.
+>
+> <script input="submit" default="Press for hint">
+"Every time the indicators are used, a frame with ID 203 should be intercepted."
+</script>
 
 {{2-3}}
-> ~~Step 6:~~
+> ~~Step 6~~ 
 >
-> **Work with Charlie 😈 to identify the CAN frames that are being sent.**
+> **Work with Charlie to identify the CAN frames that correspond to the accelerator pedal.**
+>
+> - Move the accelerator slider to various positions.
+>
+> <script input="submit" default="Press for hint">
+"Every time the accelerator is pressed, a frame with ID 81 should be intercepted."
+</script>
+
 
 {{3-4}}
 > ~~Step 7:~~
 >
-> **Wait while Charlie 😈 sends some CAN frames to the bus.**
+> **Wait while Charlie 😈 injects frames onto the CAN bus.**
+>
+> - Confirm that the indicator icons on the dashboard are responding to Charlie's 😈 CAN frames.
 
 {{4-5}}
 > ~~Step 8:~~
 >
-> **Check to see if you still have control of the vehicle.**
+> **Wait while Charlie 😈 injects frames onto the CAN bus.**
 >
-> <script input="submit" default="Press for hint">
-"Try using the accelerator."
-</script>
+> - Confirm that you do, or do not, have control of the vehicle when Charlie 😈 sends a single accelerator frame.
 
 {{5-6}}
 > ~~Step 9:~~
 >
-> **While Charlie 😈 sends some CAN frames to the bus.**
->
-> - Try and control the vehicle.
+> **Wait while Charlie 😈 floods the bus with frames.**
+> 
+> - Confirm that you do, or do not, have control of the vehicle when Charlie 😈 floods the bus with accelerator CAN frames.
 
 {{6-7}}
 > ~~Step 10:~~
 >
-> **Discuss with Bob 👨 and Charlie 😈 what is happening.**
+> **Discuss with Charlie 😈 what is happening.**
 >
-> - What is the effect of the frames that Charlie 😈 is sending?
+> - What was the effect of the frames that Charlie 😈 sent?
+> - What could a hostile attacker do with this kind of ability?
 
 <section class="flex-container">
 <div class="flex-child" style="min-width: 200px; max-width: 50%;">
@@ -412,43 +417,6 @@ the data we are sending is the same as it would be in a real CAN frame.
 @Dashboard.display
 </div>
 </section>
-
-
-## 👨 Bob 
-
-@Classroom.defaultManager
-
-{{5}}
-> **Check that the IC is responding correctly to the CAN frames that Alice is sending.** 
->
-> <script input="submit" default="Press for hint">
-"Check the indicators."
-</script>
-
-{{6}}
-> **Work with Charlie 😈 to identify the CAN frames that are being sent.**
-
-{{7}}
-> **Wait while Charlie 😈 sends some CAN frames to the bus.**
-
-{{8}}
-> **Check that the IC is responding to the frames that Charlie 😈 is sending.**
->
-> <script input="submit" default="Press for hint">
-"Are both indicators on?"
-</script>
-
-{{9}}
-> **While Charlie 😈 sends some CAN frames to the bus.**
->
-> - Check to see if Alice 👩 still has control of the vehicle.
-
-{{10}}
-> **Discuss with Alice 👩 and Charlie 😈 what is happening.**
->
-> - What is the effect of the frames that Charlie 😈 is sending?
-
-@Dashboard.display
 
 
 ## 😈 Charlie 
@@ -468,22 +436,47 @@ Charlie's role has two parts:
 
 The Intercept table will show the CAN frames that are being sent and received on the CAN bus.
 
-In this case the information that is being sent between Alice and Bob.
+In this case the information that is being sent between the various micro-controllers in the car.
 This is the first step in a man-in-the-middle attack.
 
 For a CAN bus this is passive action and does not need to be literally in the middle.
-As long as Charlie is on the same CAN bus, they can see all the messages being sent.
+As long as Charlie 😈 is on the same CAN bus, they can see all the messages being sent.
 
-{{5}}
-> **Try and identify the CAN frames that correspond to the actions that Alice 👩 is taking.**
+{{0-1}}
+> ~~Step 4~~ 
+>
+> **Confirm that you are able to intercept CAN frames as Alice 👩 drives the vehicle.**
+>
+> - You should be able to see the timestamp, frame ID and data as each frame is intercepted.
+
+
+{{1-2}}
+> ~~Step 5~~ 
+>
+> **Try and identify the CAN frames that correspond to the indicators.**
 >
 > - Importantly, we don't need to decode or understand the CAN data, just identify which frames correspond to which actions.
 >
 >   - You may want to make notes.
 >
 > <script input="submit" default="Press for hint">
-"E.g. Every time the indicators are used, a frame with ID 203 is intercepted."
+"Every time the indicators are used, a frame with ID 203 is intercepted."
 </script>
+
+{{2-3}}
+> ~~Step 6~~ 
+>
+> **Try and identify the CAN frames that correspond to the accelerator pedal.**
+>
+> - What frame ID is sent when the accelerator pedal is pressed?
+> - How does the data change when different pedal position are sent?
+>
+> <script input="submit" default="Press for hint">
+"Every time the accelerator is pressed, a frame with ID 81 is intercepted."
+</script>
+
+{{3-4}}
+> Move on to the retransmission section when you are ready.
 
 <script run-once="true" style="display: block" modify="false">
     console.log("Intercept module loaded");
@@ -532,40 +525,56 @@ As long as Charlie is on the same CAN bus, they can see all the messages being s
 
 @Classroom.defaultManager
 
-Using the form below, Charlie can transmit arbitrary CAN frames to the CAN bus.
+Using the controls below, you can inject arbitrary CAN frames into the CAN bus.
 
-{{7}}
+{{0-1}}
+> ~~Step 7:~~
+>
 > **Send a CAN frame**
 >
-> - Use the information from one of the frames that you intercepted previously.
+> - Use the information from one of the frames that you intercepted previously to turn the indicators on.
+> - Confirm with Alice 👩 that the indicators are responding to your CAN frames.
 >
 > <script input="submit" default="Press for hint">
 document.getElementById("can_frame_id").value = 203;
 document.getElementById("can_frame_data").value = "0x2000000000000000";
 document.getElementById("can_frame_duration").value = 1;
 document.getElementById("can_frame_hz").value = 1;
+document.getElementById("can_frame_duration").dispatchEvent(new Event('input'));
+document.getElementById("can_frame_hz").dispatchEvent(new Event('input'));
 
 "Send a frame to turn both indicators on."
 </script>
 
-{{8}}
-> **Check with Bob 👨 that the IC is responding to your retransmitted CAN frames.**
+{{1-2}}
+> ~~Step 8:~~
 >
-> - Sending a single frame could have a noticeable effect on the vehicle.
+> **Send an accelerator frame**
 >
->   - E.g. unlocking doors, turning on lights, etc.
-> - More subtle attacks could be to send a frame that causes the dashboard to display incorrect information.
+> - Single accelerator frame.
+> - Confirm with Alice 👩 what happens to the vehicle and if they still have control.
+>
 > <script input="submit" default="Press for hint">
-"Both indicators should have turned on."
+document.getElementById("can_frame_id").value = 81;
+document.getElementById("can_frame_data").value = "0x0000C80000000000";
+document.getElementById("can_frame_duration").value = 1;
+document.getElementById("can_frame_hz").value = 1;
+document.getElementById("can_frame_duration").dispatchEvent(new Event('input'));
+document.getElementById("can_frame_hz").dispatchEvent(new Event('input'));
+
+"Send a single frame saying the accelerator is fully pressed."
 </script>
 
-{{9}}
+{{2-3}}
+> ~~Step 9:~~
+> 
 > **Send multiple frames**
 >
 > - Use the form below to send multiple frames.
 > 
 >   - Adjust the Duration and Rate values to control how many frames are sent and how quickly.
-> - By "flooding" the CAN bus with frames we can overwhelm or drown out legitimate frames.
+>   - By "flooding" the CAN bus with frames we can overwhelm or drown out legitimate frames.
+> - Confirm with Alice 👩 what happens to the vehicle and if they still have control.
 > 
 > <script input="submit" default="Press for hint">
 document.getElementById("can_frame_id").value = 81;
@@ -578,10 +587,13 @@ document.getElementById("can_frame_hz").dispatchEvent(new Event('input'));
 "Flooding the bus with frames saying the accelerator is fully pressed."
 </script>
 
-{{10}}
-> **Discuss with Alice 👩 and Bob 👨 what is happening.**
+{{3-4}}
+> ~~Step 10:~~
 >
-> - What is the effect of the frames that you are sending?
+> **Discuss with Alice 👩 what is happening.**
+>
+> - What was the effect of the frames that you sent?
+> - What could a hostile attacker do with this kind of ability?
 
 @can.retransmit
 
@@ -592,18 +604,28 @@ document.getElementById("can_frame_hz").dispatchEvent(new Event('input'));
 In this activity you have seen how a malicious attacker can intercept and retransmit CAN frames.
 
 - This is an example of a replay attack where the attacker was able to capture real data and then replay it to the vehicle.
-  - Another example of a replay attack would be to capture the signal from the key fob and then replay it to unlock the vehicle.
+
+  - We did not need to decode the CAN data to conduct this attack.
+  - We just needed to identify the frame that corresponded to the action we wanted to perform.
+
+- More sophisticated attacks might reverse engineer the CAN data to understand what it means.
+
+  - Or acquire the format from the manufacturers documentation.
+
+- Another example of a replay attack would be to capture the signal from the key fob and then replay it to unlock the vehicle.
 
 CAN is extremely vulnerable to these types of attacks as it was designed to be simple and robust, not secure.
 
-- It pre-dates the kind of connectivity present in modern vehicles.
+- It pre-dates the kind of wireless connectivity present in modern vehicles.
+
+  - Wireless connectivity and cybersecurity mistakes mean that the CAN bus can be exposed to attackers outside the vehicle.
 
 
 ## Mitigation
 
 There are a number of ways to mitigate or limit the efficacy of these types of attacks on CAN networks.
 
-Other network technologies such as Ethernet have improved security due to a combination of designed in security features and inherent structure.
+Other vehicle network technologies such as Ethernet have improved security due to a combination of designed in security features and inherent structure.
 
 - But come at both a complexity and financial cost.
 
@@ -648,5 +670,11 @@ Other network technologies such as Ethernet have improved security due to a comb
 
 By implementing these methods, the security of CAN networks can be significantly enhanced, reducing the risk of attacks and ensuring the integrity and reliability of the communication system.
 
+
+# End of activity
+
+Congratulations on completing the CAN replay attack activity.
+
+![That's all folks!](assets/images/THAT'SALLGIFS.gif)
 
 
