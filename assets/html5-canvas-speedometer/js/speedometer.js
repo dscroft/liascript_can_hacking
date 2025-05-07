@@ -927,7 +927,7 @@ const options = {
     'markFillColor': '#ffffff',
     'markStrokeColor': '#000000',
     'markFontColor': '#ffffff',
-    'markFontSize': '14',
+    'markFontSize': '16',
     'markFontStyle': 'italic',
     'markFontFamily': 'Arial, sans-serif',
     'arrowBodyFillColor': '#0d0d0d',
@@ -938,7 +938,7 @@ const options = {
     'dangerColor': '#c1272d',
     'dangerZoneWidth': 5,
     'turnSignalColor': '#57d53f',
-    'speedUnit': 'm',
+    'speedUnit': 'km',
     'icons': icons,
     'turnSignal': turnSignals
 }
