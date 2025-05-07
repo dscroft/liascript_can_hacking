@@ -15,6 +15,25 @@ import: macros_dashboard.md
 .lia-effect__circle {
     display: none;
 }
+
+.flex-container {
+    display: flex;
+    flex-wrap: wrap; /* Allows the items to wrap as needed */
+    align-items: stretch;
+    gap: 20px; /* Adds both horizontal and vertical spacing between items */
+}
+
+.flex-child { 
+    flex: 1;
+    margin-right: 20px; /* Adds space between the columns */
+}
+
+@media (max-width: 600px) {
+    .flex-child {
+        flex: 100%; /* Makes the child divs take up the full width on slim devices */
+        margin-right: 0; /* Removes the right margin */
+    }
+}
 @end
 
 @onload
@@ -338,8 +357,14 @@ This is the setup we are trying to achieve.
 >
 > - What is the effect of the frames that Charlie 😈 is sending?
 
+<section class="flex-container">
+<div class="flex-child" style="min-width: 200px; max-width: 50%;">
 @can.alice
-
+</div>
+<div class="flex-child" style="min-width: 560px;">
+@Dashboard.display
+</div>
+</section>
 
 
 ## 👨 Bob 
@@ -571,3 +596,6 @@ Other network technologies such as Ethernet have improved security due to a comb
 -----------------------
 
 By implementing these methods, the security of CAN networks can be significantly enhanced, reducing the risk of attacks and ensuring the integrity and reliability of the communication system.
+
+
+

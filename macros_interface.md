@@ -52,51 +52,78 @@ comment:  This is placeholder module to save macros used in other modules.
     }
 @end
 
-@can.alice
-**Indicators**
+@_l
+<input type="checkbox" id="left">
+@end
 
-<!-- data-type='none'
-     data-sortable='false' -->
-| Left | Right |
-| :-: | :-: |
-| <input type="checkbox" id="left"> | <input type="checkbox" id="right"> |
+@_r
+<input type="checkbox" id="right">
+@end
 
--------------------
+@_o
+<input type="radio" name="headlights" value="off">
+@end
 
-**Headlights**
+@_d
+<input type="radio" name="headlights" value="low">
+@end 
 
-<!-- data-type='none'
-     data-sortable='false' -->
-| Off | Dipped | Full beam |
-| :-: | :-: | :-: |
-| <input type="radio" name="headlights" value="off"> | <input type="radio" name="headlights" value="low"> | <input type="radio" name="headlights" value="high"> |
+@_f
+<input type="radio" name="headlights" value="high">
+@end
 
--------------------
+@_fl
+<input type="checkbox" id="fl_door">
+@end
 
-**Doors Open**
+@_fr
+<input type="checkbox" id="fr_door">
+@end
 
-<!-- data-type='none'
-     data-sortable='false' -->
-| Front Left | Front Right | Rear Left | Rear Right |
-| :-: | :-: | :-: | :-: |
-| <input type="checkbox" id="fl_door"> | <input type="checkbox" id="fr_door"> | <input type="checkbox" id="rl_door"> | <input type="checkbox" id="rr_door"> |
+@_rl
+<input type="checkbox" id="rl_door">
+@end
 
--------------------
+@_rr
+<input type="checkbox" id="rr_door">
+@end
 
-**Driver seatbelt sensor **
-
+@_s
 <input type="checkbox" id="seatbelt">
+@end
 
--------------------
+@_a
+<input type="range" min="0" max="200" value="0" id="accelerator">
+@end
 
-**Accelerator**
+@_al
+<span id="accelerator_level"></span>
+@end
 
-<div class="slidecontainer">
-    <input type="range" min="0" max="200" value="0" id="accelerator"><span id="accelerator_level"></span>
-</div>
+@can.alice_ui
+```ascii
+            '--------+---------'
+            | Left ← | → Right |
+            +--------+---------+
+Indicators  |  "@_l" |  "@_r"  |
+            +--------+---------+
+Front doors |  "@_fl"|  "@_fr" |
+            |        |         |
+Rear  doors |  "@_rl"|  "@_rr" |
+            '--------+---------'
+        '------+--------+------'
+ Head   | Off  | Dipped | Full |
+lights  | "@_o"|  "@_d" | "@_f"|
+        '------+--------+------'
 
--------------------
+Driver seatbelt "@_s"
 
+Accelerator "@_a               "
+"@_al"
+```
+@end
+
+@can.alice_scripts
 <script> <!-- accelerator -->
 function update_accel_status()
 {
@@ -214,6 +241,11 @@ document.getElementById('right').addEventListener('click', sendSignalMsg);
 </script>
 @end
 
+@can.alice
+@can.alice_ui
+@can.alice_scripts
+@end
+
 @can.retransmit
 <label>CAN Frame ID: </label><input class="lia-quiz__input" type="text" id="can_frame_id" placeholder="123">
 <label>CAN Data: </label><input class="lia-quiz__input" type="text" id="can_frame_data" placeholder="A1B2C3D4E5F6">
@@ -235,7 +267,7 @@ document.getElementById('right').addEventListener('click', sendSignalMsg);
 
   document.getElementById("can_frame_duration").addEventListener("input", update_frame_duration);
   update_frame_duration();
-  
+
   document.getElementById("can_frame_hz").addEventListener("input", update_frame_hz);
   update_frame_hz();
 </script>
