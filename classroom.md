@@ -227,6 +227,20 @@ These roles will be referred to as Alice, Bob and Charlie.
 
   - They have gained access to the CAN bus and can send and receive messages.
 
+--------------------------------
+
+CAN bus attacks like this have been demonstrated repeatedly on the production vehicles.
+
+- In 2015 a group of researchers were able to take control of a Jeep Cherokee by sending CAN frames over the vehicle's entertainment system.
+
+  - [Wired.com story.](https://www.wired.com/2015/07/hackers-remotely-kill-jeep-highway/)
+
+- In 2016 a group of researchers were able to take control of a Tesla Model S by sending CAN frames over the vehicle's entertainment system.
+
+  - [Black Hat Europe paper.](https://www.blackhat.com/docs/us-17/thursday/us-17-Nie-Free-Fall-Hacking-Tesla-From-Wireless-To-CAN-Bus-wp.pdf)
+
+
+!?[Wired.com report on the 2015 Jeep hack](https://www.youtube.com/watch?v=MK0SrxBC1xs "Wired.com report on the 2015 Jeep hack")
 
 {{1}}
 > ~~Step 1:~~
@@ -250,12 +264,60 @@ style="background-color: firebrick; color: white"
 
 ## Hardware setup
 
-This is the setup we are trying to achieve. 
+@Classroom.defaultManager
+
+This is the setup we are emulating. 
+
+![](assets/images/placeholder.jpg "Vehicle CAN bus")
+
+{{0-1}}
+> ~~Step 2:~~
+>
+> **Make sure you are connected to the emulated CAN bus.**
+>
+> - The CAN bus status is shown at the top of the page.
+>
+>   - It it says **Emulated**<!-- style="color: green;" --> then move on to the next step.
+> - If it says **Disconnected**<!-- style="color: red;" --> then you need to connect to the classroom.
+>
+>   1. Click on the share <i class="icon icon-social lia-btn__icon"></i> icon in the top right corner of the page.
+>   2. Click on the "Classroom" button.
+>   3. Use the provided settings.
+>
+>     - via Backend: <i class="icon icon-gundb icon-xs"></i> GUN 
+>     - room: *Use the provided room name*
+>     - maybe password: *Leave blank*
+>     - relay server: https://peer.wallie.io/gun
+>     - persistent storage: *Leave blank*
+>     - Allow scripts to be executed in the chat: *Leave blank*
+>   4. Click on the "connect" button.
+>
+
+
+{{1-2}}
+> ~~Step 3:~~
+>
+> **Go to the page that corresponds to your role.**
+>
+> - Alice 👩, Bob 👨 or Charlie 😈.
+> 
+>   - You can use the navigation bar on the left or the arrow buttons below.
+
+
+-------------------------
+
+When we conduct this activity in the lab we setup an actual CAN bus using Arduino boards and send real CAN frames between them.
 
 - Each group member connected via USB to one of the Arduino circuit boards.
 - The Arduino board connected via CAN into a simple CAN bus.
 - The CAN bus terminated by appropriate resistors at each end.
 
+Because you are running this practical activity remotely we are using an emulated CAN bus instead, but
+the data we are sending is the same as it would be in a real CAN frame.
+
+<section class="flex-container">
+
+<!-- class="flex-child" style="min-width: 500px;" -->
 ```ascii
              .-------------------. .-------------------.
 +--------+   |      +--------+   | |      +--------+   |
@@ -268,33 +330,17 @@ This is the setup we are trying to achieve.
 |USB     |   +-.    |USB     |   | |      |USB     |   +-.
 +-#------+   |      +-#------+   | |      +-#------+   |
   |          |        |          | |        |          |
- 💻👩        |       💻😈        | |       💻👨        |
+ 💻👩        |       💻😈        | |       🚗          |
              .-------------------. .-------------------.
-```           
+```
+
+<!-- class="flex-child" style="min-width: 200px;" -->
+![](assets/images/placeholder.jpg "CAN bus setup in the lab")
+
+</section>
 
 
 
-
-{{2}}
-> ~~Step 2:~~
->
-> **Click on the connect button below, or on the other pages to connect to the CAN bus.**
->
-> - When pressed should get a pop-up list that allows you to select the appropriate device.
->
->   - Look for an option similar to "USB Serial Device (COMx)".
-> - Make sure that you are **Connected**<!-- style="color: green;" --> to the bus.
-
-@Classroom.defaultManager
-
-{{3}}
-> ~~Step 3:~~
->
-> **Go to the page that corresponds to your role.**
->
-> - Alice 👩, Bob 👨 or Charlie 😈.
-> 
->   - You can use the navigation bar on the left or the arrow buttons below.
 
 
 
@@ -409,7 +455,11 @@ This is the setup we are trying to achieve.
 Charlie's role has two parts:
 
 1. Interception.
+
+    - Where we identify the CAN frames that correspond to specific actions.
 2. Retransmission.
+
+    - Where we resend CAN frames we have intercepted previously to take control of the vehicle.
 
 ### Interception
 
