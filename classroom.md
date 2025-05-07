@@ -6,6 +6,7 @@ language: en
 narrator: UK English Female
 
 classroom: enable
+mode: Presentation
 icon: https://dscroft.github.io/liascript_materials/assets/logo.svg
 
 import: macros_interface.md
