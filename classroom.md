@@ -107,9 +107,9 @@ style="background-color: firebrick; color: white"
 -->
 >⚠️**Warning**
 >
-> For the practical part of the activity you will need to be using a reasonably up to date version of Chrome, Edge or Opera.
+> For the practical part of the activity you will need to be using a reasonably up to date browser version.
 >
-> - Smartphone and tablet browsers generally will not work.
+> - Smartphone browsers are not recommended due to the screen size.
 
 
 # CAN data format
