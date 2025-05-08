@@ -78,6 +78,9 @@ window.send_can_frame = function(frameid, data) {
 
 # Introduction
 
+<section class="flex-container">
+
+<div class="flex-child" style="min-width: 400px;">
 This activity is designed to demonstrate how a malicious attacker can intercept and retransmit CAN frames on a CAN bus.
 
 This sort of attack should not work in a modern vehicle but certainly was possible in older vehicles and is still possible in other systems that use CAN.
@@ -87,6 +90,12 @@ This sort of attack should not work in a modern vehicle but certainly was possib
 This activity works best in groups of 2, ideally every member will have their own computer.
 
 In the event that there are insufficient participants or computers then groups of 1 can be used but you will need to open two browser windows.
+</div>
+
+<!-- class="flex-child" style="min-width: 200px;" -->
+![](assets/images/512px-Anonymous_Hacker.png "בר, CC BY-SA 3.0, via Wikimedia Commons")
+
+</section>
 
 ------------------------------
 
@@ -112,21 +121,114 @@ style="background-color: firebrick; color: white"
 > - Smartphone browsers are not recommended due to the screen size.
 
 
+# CAN bus
+
+<section class="flex-container">
+
+<!-- class="flex-child" style="min-width: 200px;" -->
+![](assets/images/CAN_Logo.jpeg)
+
+<div class="flex-child" style="min-width: 400px;">
+The Controller Area Network (CAN) bus is a vehicle bus standard designed to facilitate communication among various electronic components in a vehicle.
+
+- It was originally developed by Bosch in the 1980s for automotive applications.
+  
+  - It is now widely used in various industries, including industrial automation, and medical devices.
+- Robust communications standard for automotive applications.
+  - Only 2 wires so minimal wiring.
+  - Interference resistant.
+  - Only up to 1Mbps but it is resilient.
+</div>
+</section>
+
+Interference
+============
+
+<section class="flex-container">
+<div class="flex-child" style="min-width: 400px;">
+Uses twisted pair of wires to reduce interference.
+
+- CAN works on voltage difference between CANL and CANH.
+
+  - Not absolute voltage.
+
+- Differential signals (CANL/CANH) helps eliminate interference voltages induced by:
+
+  - Motors.
+  - Ignition systems.
+  - Switch contacts.
+
+- Since the wires are a twisted pair, any interference will be (approximately) the same on both wires.
+
+  - So the voltage differential remains the same regardless of interference.
+</div>
+
+<!-- class="flex-child" style="min-width: 200px;" -->
+![](assets/images/Automotive_Chapter_3_Fig2-_960_x_560.png)
+
+</section>
+
+CAN frames
+==========
+
+Communication on a CAN bus is done using frames.
+
+- A frame is a single message sent on the bus.
+- Each frame has a unique identifier (ID) that determines its priority on the bus.
+
+  - Lower ID = higher priority.
+
+- The frame also contains the data being sent, which can be up to 8 bytes in length for classic CAN.
+
+  - The data is typically a binary representation of some information, such as sensor readings or control commands.
+  - More recent versions of CAN allow for larger data sizes.
+
+- The frame also contains control information such as the length of the data and a checksum for error detection.
+ 
+  - But this is generally handled by the hardware for us.
+
+
+Communication principle
+=====================
+
+<section class="flex-container">
+
+<div class="flex-child" style="min-width: 400px;">
+CAN bus is a multi-master broadcast architecture.
+
+- In CAN, every node receives every message.
+
+- Lack of identification of the sender.
+
+  - This is a problem for security.
+  - If you can put a CAN frame onto the bus, the other nodes can't tell who sent it.
+</div>
+
+<!-- class="flex-child" style="min-width: 200px;" -->
+![What is clearly a spy wearing a ridiculous wig to disguise themself poorly](assets/images/spy.png "Not at all suspicious.")
+
+</section>
+
 # CAN data format
 
 Over the next couple of pages we will be looking at the format of CAN data and how it can be represented in a more human readable format.
 
+
+![](assets/images/CAN-bus-frame-with-stuff-bit-and-correct-CRC.png "A complete CAN bus frame, including stuff bits, a correct CRC, and inter-frame spacing. Attribution Ken Tindell, Canis Automotive Labs Ltd, CC BY-SA 4.0, via Wikimedia Commons")
+
+
+
 ## DBC Format
 
-Various ways to represent CAN frame structure, we are going to use DBC.
+There are various ways to document the structure of a CAN frame, we are going to use DBC.
 
-For example: the accelerator pedal position information for a 2010 Toyota Prius could be represented as shown below.
+For example: the accelerator pedal position information for a 2010 Toyota Prius could be recorded as shown below.
 
 ```ascii
 Frame ID     Frame Name
      \         /       .------ Frame Length (in bytes)
-      \       /       /              Max value
-       v      V       V                  |
+      \       /       /                    .-- Max value
+       v     v       V                    /
    BO_ 81 GAS_PEDAL: 8 XXX               V
     SG_ GAS_PEDAL : 23|8@0+ (0.005,0) [0|1] '' XXX
            ^        ^ ^  ^ ^    ^   ^   ^ 
@@ -138,12 +240,12 @@ Signal name       / /    |   \    \   \   Min value
                 Motorola/Intel Format 
 ```                        
 
-What this specifies is that accelerator pedal position will be transmitted as a value between 0 and 200, stored in bits 23 to 16 and that pedal position can be sent in 0.5% increments.
+What this specifies is that accelerator pedal position will be transmitted as a value between 0 and 200, stored in bits 23 to 16 for the data payload and that pedal position can be sent in 0.5% increments.
 
 <details>
 <summary>**Umm, actually...**</summary>
 
-> In reality the frame ID is 581 but for the sake of simplicity for this task we are using classic CAN and so have to keep our frame IDs <256
+> In reality the frame ID is 581 on the Prius but for the sake of simplicity for this task we are using classic CAN not CAN-FD and so have to keep our frame IDs <256
 </details>
 
 ## Encoding information
@@ -206,8 +308,10 @@ Assuming that there was no other information being sent in this frame, the compl
 
 0000000000000000100101100000000000000000000000000000000000000000
 
-But as that's quite unwheldly it's not common to represent the information in hexademical (base 16) format. 
+But as that's quite unwheldly, so it's not uncommon to represent the information in hexademical (base 16) format. 
 In which case it appears as 0x0000960000000000
+
+
 
 
 # Activity 
