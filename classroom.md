@@ -93,7 +93,7 @@ In the event that there are insufficient participants or computers then groups o
 </div>
 
 <!-- class="flex-child" style="min-width: 200px;" -->
-![](assets/images/512px-Anonymous_Hacker.png "בר, CC BY-SA 3.0, via Wikimedia Commons")
+![](assets/images/512px-Anonymous_Hacker.png "Attribution בר, CC BY-SA 3.0, via Wikimedia Commons")
 
 </section>
 
@@ -125,8 +125,8 @@ style="background-color: firebrick; color: white"
 
 <section class="flex-container">
 
-<!-- class="flex-child" style="min-width: 200px;" -->
-![](assets/images/CAN_Logo.jpeg)
+<!-- class="flex-child" style="min-width: 100px;" -->
+![](assets/images/CAN_Logo.jpeg "Unofficial logo of the CAN bus by CAN-in-Automation")
 
 <div class="flex-child" style="min-width: 400px;">
 The Controller Area Network (CAN) bus is a vehicle bus standard designed to facilitate communication among various electronic components in a vehicle.
@@ -164,7 +164,7 @@ Uses twisted pair of wires to reduce interference.
 </div>
 
 <!-- class="flex-child" style="min-width: 200px;" -->
-![](assets/images/Automotive_Chapter_3_Fig2-_960_x_560.png)
+![](assets/images/Automotive_Chapter_3_Fig2-_960_x_560.png "Attribution monolithicpower.com")
 
 </section>
 
@@ -204,7 +204,7 @@ CAN bus is a multi-master broadcast architecture.
   - If you can put a CAN frame onto the bus, the other nodes can't tell who sent it.
 </div>
 
-<!-- class="flex-child" style="min-width: 200px;" -->
+<!-- class="flex-child" style="min-width: 100px;" -->
 ![What is clearly a spy wearing a ridiculous wig to disguise themself poorly](assets/images/spy.png "Not at all suspicious.")
 
 </section>
