@@ -59,7 +59,7 @@ window.iconsStates = {
     }
 
 window.speed = 0.0;
-window.gas = 0.5;
+window.gas = 0.8;
 window.mileage = 12345;
 window.tacho = 0.0;
 
@@ -74,8 +74,20 @@ window.tacho = 0.0;
 <script>
     window.dashboard_refresh = setInterval(function()
     {
-        let change = ( window.tacho - 0.2 ) * 0.01;
-        window.speed = Math.max( 0, Math.min( 1, window.speed + change ) );
+        let maxSpeed = 0.81;
+        let targetSpeed = maxSpeed * window.tacho;
+        let delta = targetSpeed - window.speed;
+        let alpha = 0.005;
+
+        window.speed += delta * alpha;
+
+        //use gas
+        if( window.tacho > 0 )
+        { 
+            window.gas = Math.max( 0.1, window.gas - 0.00005 );
+        }
+
+        window.mileage += window.speed / 500;
 
         if( !document.getElementById("canvas") )
         {
@@ -86,10 +98,10 @@ window.tacho = 0.0;
         try
         {
             window.Dashboard.draw( document.getElementById("canvas"), 
-                window.speed * 0.95 + ( 0.005 * Math.random() -0.0025 ), 
-                window.tacho, 
+                Math.max( 0, window.speed + ( 0.005 * Math.random() -0.0025 ) ),
+                window.tacho * 0.93, 
                 window.gas, 
-                window.mileage, 
+                Math.round( window.mileage, 0 ), 
                 window.turnSignalsStates, 
                 window.iconsStates );
         }
