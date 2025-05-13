@@ -81,15 +81,14 @@ window.send_can_frame = function(frameid, data) {
 <section class="flex-container">
 
 <div class="flex-child" style="min-width: 400px;">
-This activity is designed to demonstrate how a malicious attacker can intercept and retransmit CAN frames on a CAN bus.
+This activity is designed to demonstrate how a malicious attacker can intercept and retransmit CAN frames on the CAN network of an intra-vehicle network.
 
-This sort of attack should not work in a modern vehicle but certainly was possible in older vehicles and is still possible in other systems that use CAN.
-
+This sort of attack would work on any vehicle with a CAN network with no protection nmechanism in place. 
 ------------------------------
 
-This activity works best in groups of 2, ideally every member will have their own computer.
+This activity is best done in pairs, with each participant ideally having access to their own computer.
 
-In the event that there are insufficient participants or computers then groups of 1 can be used but you will need to open two browser windows.
+If there aren’t enough participants or devices, participants can complete the activity alone by opening two separate browser windows.
 </div>
 
 <!-- class="flex-child" style="min-width: 200px;" -->
@@ -118,7 +117,7 @@ style="background-color: firebrick; color: white"
 >
 > For the practical part of the activity you will need to be using a reasonably up to date browser version.
 >
-> - Smartphone browsers are not recommended due to the screen size.
+> - It is not recommanded to use smartphone browsers due to their screen size.
 
 
 # CAN bus
@@ -137,7 +136,10 @@ The Controller Area Network (CAN) bus is a vehicle bus standard designed to faci
 - Robust communications standard for automotive applications.
   - Only 2 wires so minimal wiring.
   - Interference resistant.
-  - Only up to 1Mbps but it is resilient.
+  - CAN 2.0 can go up to 1Mbps (Mega bit per second) but it is resilient.
+- New versions of CAN exist to support applications requiring improved data rate
+  - CAN FD goes up to 8Mbps
+  - The newest currently standardised version of CAN, CAN XL, goes up to 20Mbps.
 </div>
 </section>
 
@@ -148,7 +150,7 @@ Interference
 <div class="flex-child" style="min-width: 400px;">
 Uses twisted pair of wires to reduce interference.
 
-- CAN works on voltage difference between CANL and CANH.
+- CAN works on voltage difference between CANH and CANL.
 
   - Not absolute voltage.
 
@@ -171,22 +173,20 @@ Uses twisted pair of wires to reduce interference.
 CAN frames
 ==========
 
-Communication on a CAN bus is done using frames.
+Communication on a CAN bus takes place using data frames, each representing a single message transmitted across the network.
 
-- A frame is a single message sent on the bus.
-- Each frame has a unique identifier (ID) that determines its priority on the bus.
+- Each frame has a unique identifier (ID), which also determines its priority on the bus:
+  - Lower ID = higher priority (i.e., messages with lower IDs are transmitted first).
 
-  - Lower ID = higher priority.
+- The frame carries the actual data, which can be:
+  - Up to 8 bytes in Classic CAN.
+  - Larger (up to 64 bytes or more) in newer standards like CAN FD and CAN XL.
+  - The data typically encodes binary values such as sensor outputs or control signals.
 
-- The frame also contains the data being sent, which can be up to 8 bytes in length for classic CAN.
-
-  - The data is typically a binary representation of some information, such as sensor readings or control commands.
-  - More recent versions of CAN allow for larger data sizes.
-
-- The frame also contains control information such as the length of the data and a checksum for error detection.
- 
-  - But this is generally handled by the hardware for us.
-
+- Control information is also included, such as:
+  - The data length code (DLC), specifying the number of data bytes.
+  - A checksum (CRC) for error detection and integrity.
+  - These aspects are generally handled automatically by the CAN controller hardware.
 
 Communication principle
 =====================
@@ -194,14 +194,17 @@ Communication principle
 <section class="flex-container">
 
 <div class="flex-child" style="min-width: 400px;">
-CAN bus is a multi-master broadcast architecture.
+The CAN bus uses a multi-master, broadcast architecture, meaning that:
+- Any node can transmit at any time, without needing permission.
+- Bus access is determined by message priority:
+  - The lower the CAN ID, the higher the priority.
+  - In the case of simultaneous transmissions, the message with the lowest ID wins arbitration and continues transmission without collision.
 
-- In CAN, every node receives every message.
-
-- Lack of identification of the sender.
-
-  - This is a problem for security.
-  - If you can put a CAN frame onto the bus, the other nodes can't tell who sent it.
+All nodes receive all messages on the bus — this is a fundamental part of the broadcast nature of CAN.
+- CAN does not identify the sender of a message.
+- There is no built-in source address or authentication. This creates a security vulnerability:
+  - Any device that can transmit on the bus can send messages indistinguishable from legitimate nodes.
+  - Receiving nodes have no way of verifying who sent the message.
 </div>
 
 <!-- class="flex-child" style="min-width: 100px;" -->
@@ -220,7 +223,12 @@ Over the next couple of pages we will be looking at the format of CAN data and h
 
 ## DBC Format
 
-There are various ways to document the structure of a CAN frame, we are going to use DBC.
+There are various ways to document the structure of a CAN frame, we are going to use DBC (Database CAN). DBC is a standard file format used to describe the structure of CAN messages.
+
+It tells you:
+ - Which CAN IDs are used
+ - What each signal in the message represents
+ - How to decode and scale the data
 
 For example: the accelerator pedal position information for a 2010 Toyota Prius could be recorded as shown below.
 
@@ -245,7 +253,7 @@ What this specifies is that accelerator pedal position will be transmitted as a 
 <details>
 <summary>**Umm, actually...**</summary>
 
-> In reality the frame ID is 581 on the Prius but for the sake of simplicity for this task we are using classic CAN not CAN-FD and so have to keep our frame IDs <256
+> In reality the CAN frame ID is 581 on the Prius but for the sake of simplicity for this task we are using classic CAN not CAN-FD and so have to keep our frame IDs <256
 </details>
 
 ## Encoding information
@@ -308,26 +316,58 @@ Assuming that there was no other information being sent in this frame, the compl
 
 0000000000000000100101100000000000000000000000000000000000000000
 
-But as that's quite unwheldly, so it's not uncommon to represent the information in hexademical (base 16) format. 
-In which case it appears as 0x0000960000000000
+But as that's quite impractical to work in binary, we usually represent the information in hexademical (base 16) format using this conversation table:
+
+| Binary | Hex |
+|--------|-----|
+| 0000   | 0   |
+| 0001   | 1   |
+| 0010   | 2   |
+| 0011   | 3   |
+| 0100   | 4   |
+| 0101   | 5   |
+| 0110   | 6   |
+| 0111   | 7   |
+| 1000   | 8   |
+| 1001   | 9   |
+| 1010   | A   |
+| 1011   | B   |
+| 1100   | C   |
+| 1101   | D   |
+| 1110   | E   |
+| 1111   | F   |
+
+In which case it appears as 0x0000960000000000 where 0x is there to indicate that the data is represented in hexadecimal.
 
 
 
 
 # Activity 
 
-These instructions are written on the assumption that you are working as part of a two person group, each person fills a specific role.
+## 🧑‍🤝‍🧑 Roles and Scenario
 
-These roles will be referred to as Alice and Charlie.
+These instructions assume you are working in **a two-person group**, with each person taking on a specific role. For clarity, we will refer to these roles as **Alice** and **Charlie**:
 
-- Alice 👩 will be playing the part of the driver.
+---
 
-  - In this scenario it is a drive by wire vehicle, so the accelerator pedal is not mechanically linked to anything.
-  - Pressing the pedal causes a signal to be sent to the engine control unit (ECU) to perform the appropriate action. 
+## 👩 Alice – The Driver
 
-- Charlie 😈 will be playing a malicious attacker.
+Alice is acting as the **driver** of the vehicle.
+- This is a **drive-by-wire** system — there are **no mechanical connections** between the accelerator pedal and the engine.
+- When Alice presses the accelerator, a **digital signal is sent over the CAN bus** to the **Engine Control Unit (ECU)**, which then controls the engine response.
 
-  - They have gained access to the CAN bus to send and receive messages.
+---
+
+## 😈 Charlie – The Attacker
+
+Charlie plays the role of a **malicious attacker**.
+- Charlie has **unauthorised access to the CAN bus**.
+- They can **send and receive CAN messages**, potentially interfering with normal vehicle behaviour.
+
+---
+
+Together, you will simulate a real-world scenario involving both **legitimate control** and a **cybersecurity threat** on a CAN network.
+
 
 ```ascii
 
@@ -410,7 +450,7 @@ the data we are sending is the same as it would be in a real CAN frame.
 >
 > **Make sure you are connected to the emulated CAN bus.**
 >
-> - The CAN bus status is shown at the top of the page.
+> - The CAN bus status is shown at the top of the page. Please, scroll up and check that this is the case.
 >
 >   - It it says **Emulated**<!-- style="color: green;" --> then move on to the next step.
 > - If it says **Disconnected**<!-- style="color: red;" --> then you need to connect to the classroom.
