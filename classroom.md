@@ -699,9 +699,18 @@ document.getElementById("can_frame_hz").dispatchEvent(new Event('input'));
 > - What was the effect of the frames that you sent?
 > - What could a hostile attacker do with this kind of ability?
 
+
 @can.retransmit
 
+{{1}}
+<script style="display: none">
+  document.getElementById("sliders").style.display = "none";
+</script>
 
+{{2}}
+<script style="display: none">
+  document.getElementById("sliders").style.display = "block";
+</script>
 
 # Summary
 

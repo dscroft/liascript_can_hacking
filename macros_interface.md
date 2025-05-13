@@ -246,12 +246,17 @@ document.getElementById('right').addEventListener('click', sendSignalMsg);
 @can.alice_scripts
 @end
 
-@can.retransmit
+
+@can.retransmit_ui
 <label>CAN Frame ID: </label><input class="lia-quiz__input" type="text" id="can_frame_id" placeholder="123">
 <label>CAN Data: </label><input class="lia-quiz__input" type="text" id="can_frame_data" placeholder="A1B2C3D4E5F6">
-<label>Duration: </label><span id="duration"></span><input type="range" min="1" max="30" value="1" id="can_frame_duration">
-<label>Rate: </label><span id="hz"></span><input type="range" min="1" max="100" value="1" id="can_frame_hz">
+<div id="sliders" style="display: none;">
+  <label>Duration: </label><span id="duration"></span><input type="range" min="1" max="30" value="1" id="can_frame_duration">
+  <label>Rate: </label><span id="hz"></span><input type="range" min="1" max="100" value="1" id="can_frame_hz">
+</div>
+@end
 
+@can.retransmit_scripts
 <script>
   function update_frame_duration()
   {
@@ -273,31 +278,62 @@ document.getElementById('right').addEventListener('click', sendSignalMsg);
 </script>
 
 <script input="submit" default="Send">
-  let id = parseInt(document.getElementById("can_frame_id").value);
-
-  let data = document.getElementById("can_frame_data").value.toUpperCase();
-  if( data.startsWith("0X") ) data = data.slice(2);
-  data = data.match(/.{2}/g).map(byte => parseInt(byte, 16));
-
-  let duration = parseFloat(document.getElementById("can_frame_duration").value);
-  let hz = parseFloat(document.getElementById("can_frame_hz").value);
-  let num = duration * hz;
-
-  send.lia("Sending "+num+" messages");
-
-  let interval = setInterval(() => {
-    window.send_can_frame( id, data );
-    num -= 1;
-    send.lia( "Messages remaining: "+num );
-
-    
-    if (num <= 0) {
-      clearInterval(interval);
-      send.lia("Send");
+  function submit()
+  {
+    // process frame id
+    let id = parseInt(document.getElementById("can_frame_id").value);
+    if( isNaN(id) )
+    {
+        send.lia("Invalid CAN Frame ID");
+        return;
     }
-  }, 1000 / hz);
+
+    // process data
+    let rawdata = document.getElementById("can_frame_data").value.toUpperCase();
+    if( rawdata.startsWith("0X") ) rawdata = rawdata.slice(2);
+    let matchdata = rawdata.match(/.{2}/g)
+    
+    if( matchdata == null )
+    {
+        send.lia("Invalid CAN data format");
+        return;
+    }
+    
+    let data = matchdata.map(byte => parseInt(byte, 16));
+
+    // if sliders are visible, handle hz and duration
+    let duration = 1;
+    let hz = 1;
+    if( document.getElementById("sliders").style.display !== "none" ) 
+    {
+        duration = parseFloat(document.getElementById("can_frame_duration").value);
+        hz = parseFloat(document.getElementById("can_frame_hz").value);
+    }
+
+    let num = duration * hz;
+
+    send.lia("Sending "+num+" messages");
+
+    let interval = setInterval(() => {
+        window.send_can_frame( id, data );
+        num -= 1;
+        send.lia( "Messages remaining: "+num );
+
+        if (num <= 0) {
+        clearInterval(interval);
+        send.lia("Send");
+        }
+    }, 1000 / hz);
+  }
+
+  submit();
 
 </script>
+@end
+
+@can.retransmit
+@can.retransmit_ui
+@can.retransmit_scripts
 @end
 
 @can.intercept
