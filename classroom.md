@@ -590,10 +590,12 @@ As long as Charlie 😈 is on the same CAN bus, they can see all the messages be
     }
     
     let bufferMaxSize = 10;
+    let counter = 0;
 
     function addToBuffer(line) 
     {
-        buffer.push([Date.now(), ...line]);
+        buffer.push([counter, Date.now(), ...line]);
+        counter += 1;
         if (buffer.length > bufferMaxSize) 
             buffer.shift();
     }
@@ -603,12 +605,12 @@ As long as Charlie 😈 is on the same CAN bus, they can see all the messages be
         let liatable =  "<!-- data-type='none' \n" +
                         "     data-title='Received CAN frames' \n" + 
                         "     data-sortable='false' -"+"->\n" + // bodge for macro parser
-                        "| Timestamp | CAN Frame ID | Data |\n" +
-                        "|-|-|------|\n"
+                        "| Frame Counter | Timestamp | CAN Frame ID | Data |\n" +
+                        "|-|-|-|------|\n"
 
         for (let i = 0; i < buffer.length; ++i) {  
-            let hex = buffer[i][2].map(byte => byte.toString(16).padStart(2, '0').toUpperCase()).join('');
-            liatable += `| ${buffer[i][0]} | ${buffer[i][1]} | 0x${hex} |\n`;
+            let hex = buffer[i][3].map(byte => byte.toString(16).padStart(2, '0').toUpperCase()).join('');
+            liatable += `| ${buffer[i][0]} | ${buffer[i][1]} | ${buffer[i][2]} | 0x${hex} |\n`;
         }
 
         send.lia( "LIASCRIPT: "+liatable );
