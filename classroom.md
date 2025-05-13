@@ -342,25 +342,28 @@ In which case it appears as 0x0000960000000000 where 0x is there to indicate tha
 
 
 
-# Activity 
+# Activity: 🧑‍🤝‍🧑 Roles and Scenario
 
-## 🧑‍🤝‍🧑 Roles and Scenario
 
 These instructions assume you are working in **a two-person group**, with each person taking on a specific role. For clarity, we will refer to these roles as **Alice** and **Charlie**:
 
 ---
 
-## 👩 Alice – The Driver
+👩 Alice – The Driver
+====
 
 Alice is acting as the **driver** of the vehicle.
+
 - This is a **drive-by-wire** system — there are **no mechanical connections** between the accelerator pedal and the engine.
 - When Alice presses the accelerator, a **digital signal is sent over the CAN bus** to the **Engine Control Unit (ECU)**, which then controls the engine response.
 
 ---
 
-## 😈 Charlie – The Attacker
+😈 Charlie – The Attacker
+====
 
 Charlie plays the role of a **malicious attacker**.
+
 - Charlie has **unauthorised access to the CAN bus**.
 - They can **send and receive CAN messages**, potentially interfering with normal vehicle behaviour.
 
