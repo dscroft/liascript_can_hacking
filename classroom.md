@@ -195,14 +195,18 @@ Communication principle
 
 <div class="flex-child" style="min-width: 400px;">
 The CAN bus uses a multi-master, broadcast architecture, meaning that:
+
 - Any node can transmit at any time, without needing permission.
 - Bus access is determined by message priority:
+
   - The lower the CAN ID, the higher the priority.
   - In the case of simultaneous transmissions, the message with the lowest ID wins arbitration and continues transmission without collision.
 
 All nodes receive all messages on the bus — this is a fundamental part of the broadcast nature of CAN.
+
 - CAN does not identify the sender of a message.
 - There is no built-in source address or authentication. This creates a security vulnerability:
+
   - Any device that can transmit on the bus can send messages indistinguishable from legitimate nodes.
   - Receiving nodes have no way of verifying who sent the message.
 </div>
