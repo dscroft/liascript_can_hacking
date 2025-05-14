@@ -6,7 +6,7 @@ language: en
 narrator: UK English Female
 
 classroom: enable
-mooode: Presentation
+mode: Presentation
 icon: https://dscroft.github.io/liascript_materials/assets/logo.svg
 
 import: macros_interface.md
@@ -83,12 +83,13 @@ window.send_can_frame = function(frameid, data) {
 <div class="flex-child" style="min-width: 400px;">
 This activity is designed to demonstrate how a malicious attacker can intercept and retransmit CAN frames on the CAN network of an intra-vehicle network.
 
-This sort of attack would work on any vehicle with a CAN network with no protection nmechanism in place. 
+This sort of attack would work on any vehicle with a CAN network but no protection mechanism in place. 
+
 ------------------------------
 
 This activity is best done in pairs, with each participant ideally having access to their own computer.
 
-If there aren’t enough participants or devices, participants can complete the activity alone by opening two separate browser windows.
+If there aren't enough participants or devices, participants can complete the activity alone by opening two separate browser windows.
 </div>
 
 <!-- class="flex-child" style="min-width: 200px;" -->
@@ -176,14 +177,17 @@ CAN frames
 Communication on a CAN bus takes place using data frames, each representing a single message transmitted across the network.
 
 - Each frame has a unique identifier (ID), which also determines its priority on the bus:
+
   - Lower ID = higher priority (i.e., messages with lower IDs are transmitted first).
 
 - The frame carries the actual data, which can be:
+
   - Up to 8 bytes in Classic CAN.
   - Larger (up to 64 bytes or more) in newer standards like CAN FD and CAN XL.
   - The data typically encodes binary values such as sensor outputs or control signals.
 
 - Control information is also included, such as:
+
   - The data length code (DLC), specifying the number of data bytes.
   - A checksum (CRC) for error detection and integrity.
   - These aspects are generally handled automatically by the CAN controller hardware.
@@ -195,14 +199,18 @@ Communication principle
 
 <div class="flex-child" style="min-width: 400px;">
 The CAN bus uses a multi-master, broadcast architecture, meaning that:
+
 - Any node can transmit at any time, without needing permission.
 - Bus access is determined by message priority:
+
   - The lower the CAN ID, the higher the priority.
   - In the case of simultaneous transmissions, the message with the lowest ID wins arbitration and continues transmission without collision.
 
 All nodes receive all messages on the bus — this is a fundamental part of the broadcast nature of CAN.
+
 - CAN does not identify the sender of a message.
 - There is no built-in source address or authentication. This creates a security vulnerability:
+
   - Any device that can transmit on the bus can send messages indistinguishable from legitimate nodes.
   - Receiving nodes have no way of verifying who sent the message.
 </div>
@@ -226,6 +234,7 @@ Over the next couple of pages we will be looking at the format of CAN data and h
 There are various ways to document the structure of a CAN frame, we are going to use DBC (Database CAN). DBC is a standard file format used to describe the structure of CAN messages.
 
 It tells you:
+
  - Which CAN IDs are used
  - What each signal in the message represents
  - How to decode and scale the data
@@ -318,24 +327,25 @@ Assuming that there was no other information being sent in this frame, the compl
 
 But as that's quite impractical to work in binary, we usually represent the information in hexademical (base 16) format using this conversation table:
 
-| Binary | Hex |
-|--------|-----|
-| 0000   | 0   |
-| 0001   | 1   |
-| 0010   | 2   |
-| 0011   | 3   |
-| 0100   | 4   |
-| 0101   | 5   |
-| 0110   | 6   |
-| 0111   | 7   |
-| 1000   | 8   |
-| 1001   | 9   |
-| 1010   | A   |
-| 1011   | B   |
-| 1100   | C   |
-| 1101   | D   |
-| 1110   | E   |
-| 1111   | F   |
+<!-- data-type='none' data-title='Binary/hexadecimal/denary conversion' -->
+| Binary | Hex | Base 10 |
+|--------|-----|---------|
+| 0000   | 0   | 0   |
+| 0001   | 1   | 1   |
+| 0010   | 2   | 2   |
+| 0011   | 3   | 3   |
+| 0100   | 4   | 4   |
+| 0101   | 5   | 5   |
+| 0110   | 6   | 6   |
+| 0111   | 7   | 7   |
+| 1000   | 8   | 8   |
+| 1001   | 9   | 9   |
+| 1010   | A   | 10   |
+| 1011   | B   | 11   |
+| 1100   | C   | 12   |
+| 1101   | D   | 13   |
+| 1110   | E   | 14   |
+| 1111   | F   | 15   |
 
 In which case it appears as 0x0000960000000000 where 0x is there to indicate that the data is represented in hexadecimal.
 
@@ -349,7 +359,7 @@ These instructions assume you are working in **a two-person group**, with each p
 
 ---
 
-👩 Alice – The Driver
+👩 Alice - The Driver
 ====
 
 Alice is acting as the **driver** of the vehicle.
@@ -359,7 +369,7 @@ Alice is acting as the **driver** of the vehicle.
 
 ---
 
-😈 Charlie – The Attacker
+😈 Charlie - The Attacker
 ====
 
 Charlie plays the role of a **malicious attacker**.
