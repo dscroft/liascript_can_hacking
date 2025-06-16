@@ -445,7 +445,7 @@ This is the setup we are emulating.
 ```
 
 <!-- class="flex-child" style="min-width: 200px;" -->
-![](assets/images/placeholder.jpg "CAN bus setup in the lab")
+![](assets/images/PXL_20250609_093926667.jpg.webp "CAN bus setup in the lab")
 
 </section>
 
