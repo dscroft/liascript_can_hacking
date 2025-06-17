@@ -134,11 +134,15 @@ The Controller Area Network (CAN) bus is a vehicle bus standard designed to faci
 - It was originally developed by Bosch in the 1980s for automotive applications.
   
   - It is now widely used in various industries, including industrial automation, and medical devices.
+  
 - Robust communications standard for automotive applications.
+
   - Only 2 wires so minimal wiring.
   - Interference resistant.
   - CAN 2.0 can go up to 1Mbps (Mega bit per second) but it is resilient.
+  
 - New versions of CAN exist to support applications requiring improved data rate
+
   - CAN FD goes up to 8Mbps
   - The newest currently standardised version of CAN, CAN XL, goes up to 20Mbps.
 </div>
@@ -241,6 +245,7 @@ It tells you:
 
 For example: the accelerator pedal position information for a 2010 Toyota Prius could be recorded as shown below.
 
+<!-- style="max-width: 800px;" -->
 ```ascii
 Frame ID     Frame Name
      \         /       .------ Frame Length (in bytes)
@@ -501,11 +506,11 @@ the data we are sending is the same as it would be in a real CAN frame.
 {{0-1}}
 > ~~Step 4:~~
 >
-> **Use the controls at he bottom of the page to simulate driving the vehicle.**
+> **Use the controls at the bottom of the page to simulate driving the vehicle.**
 >
 > - When you interact with the controls, the corresponding CAN frames will be sent to the CAN bus.
 >
->   - These frames will be picked up by the other devices on the bus e.g. Bob.
+>   - These frames will be picked up by the other devices on the bus e.g. Charlie.
 >   - These CAN frames are based on *real* frames. E.g. the accelerator pedal frame was taken from a 2010 Toyota Prius.
 >
 > <script input="submit" default="Press for hint">
