@@ -84,7 +84,7 @@ window.tacho = 0.0;
         //use gas
         if( window.tacho > 0 )
         { 
-            window.gas = Math.max( 0.1, window.gas - 0.0005 );
+            window.gas = Math.max( 0.1, window.gas - 0.00005 );
         }
 
         window.mileage += window.speed / 100;
